@@ -1,0 +1,186 @@
+<div class="tituloPagina">
+  {{ Titulo }} <small>{{ TituloAccionABMC[Mostrar] }}</small>
+</div>
+
+<div id="divTablaResultados" *ngIf="Mostrar == 'L'">
+  <!-- Boton de alta -->
+  <div class="row justify-content-center botones">
+    <button type="button" class="btn btn-primary" (click)="mostrarAlta()">
+      <i class="fa fa-plus"> </i>
+      Alta
+    </button>
+  </div>
+
+  <table class="table table-hover table-sm table-bordered table-striped">
+    <thead>
+      <tr>
+        <th class="text-center">Tarjeta</th>
+        <th class="text-center">Cantidad</th>
+        <th class="text-center">Activo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of Items">
+        <td>{{ item.tarjeta | uppercase }}</td>
+        <td>{{ item.cantidad }}</td>
+        <td>{{ item.activo }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Mostrar Registros Totales-->
+  <div class="paginador">
+    <div class="row">
+      <div class="col">
+        <span class="pyBadge"> Registros: {{ RegistrosTotal }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--No se encontraron registros-->
+<div
+  class="alert alert-info mensajesAlert"
+  *ngIf="Mostrar == 'L' && Items?.length == 0"
+>
+  <i class="fa fa-exclamation-sign"></i>{{ Mensajes['SD'] }}
+  <!-- texto: No se encontraron registros -->
+</div>
+
+<!-- Formulario Reactivo Alta -->
+
+<div class="container" *ngIf="Mostrar == 'A'">
+  <form [formGroup]="FormAlta">
+    <!-- Campo tarjeta -->
+    <div class="row">
+      <div class="col-4">
+        <label class="col-form-label">
+          Tarjeta <span class="text-danger">*</span>:</label
+        >
+      </div>
+
+      <div class="col-8">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="tarjeta"
+          [ngClass]="{
+            'is-invalid':
+              FormAlta.controls['tarjeta'].errors &&
+              FormAlta.controls['tarjeta'].touched
+          }"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            FormAlta.controls['tarjeta'].hasError('required') &&
+            FormAlta.controls['tarjeta'].touched
+          "
+        >
+          <i>Dato requerido</i>
+        </div>
+
+        <div
+          class="text-danger"
+          *ngIf="
+            FormAlta.controls['tarjeta'].hasError('maxlength') &&
+            FormAlta.controls['tarjeta'].touched
+          "
+        >
+          <i>Campo de máximo 50 caracteres</i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campo cantidad -->
+
+    <div class="row">
+      <div class="col-4">
+        <label class="col-form-label">
+          Cantidad <span class="text-danger">*</span>:</label
+        >
+      </div>
+
+      <div class="col-8">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="cantidad"
+          [ngClass]="{
+            'is-invalid':
+              FormAlta.controls['cantidad'].errors &&
+              FormAlta.controls['cantidad'].touched
+          }"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            FormAlta.controls['cantidad'].hasError('required') &&
+            FormAlta.controls['cantidad'].touched
+          "
+        >
+          <i>Dato requerido</i>
+        </div>
+
+        <div
+          class="text-danger"
+          *ngIf="
+            FormAlta.controls['cantidad'].hasError('pattern') &&
+            FormAlta.controls['cantidad'].touched
+          "
+        >
+          <i>Ingrese una Cantidad válida</i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campo Activo -->
+    <div class="row">
+      <div class="col-4">
+        <label class="col-form-label">
+          Activo <span class="text-danger">*</span>:</label
+        >
+      </div>
+      <div class="col-8">
+        <select
+          class="form-control"
+          formControlName="activo"
+          [ngClass]="{
+            'is-invalid':
+              FormAlta.controls['activo'].errors &&
+              FormAlta.controls['activo'].touched
+          }"
+        >
+          <option *ngFor="let item of OpcionesActivo" [ngValue]="item.Id">
+            {{ item.Nombre }}
+          </option>
+        </select>
+        <div
+          class="text-danger"
+          *ngIf="
+            FormAlta.controls['activo'].hasError('required') &&
+            FormAlta.controls['activo'].touched
+          "
+        >
+          <i> Dato requerido </i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="row justify-content-center botones">
+      <button type="button" class="btn btn-warning" (click)="mostrarListado()">
+        <i class="fa fa-undo"></i>
+        Cancelar
+      </button>
+
+      <button
+        class="btn btn-primary"
+        (click)="grabarTarjeta()"
+        [disabled]="FormAlta.invalid"
+      >
+        <i class="fa fa-check"></i> Aceptar
+      </button>
+    </div>
+  </form>
+</div>
