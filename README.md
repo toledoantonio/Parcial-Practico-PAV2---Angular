@@ -1,4 +1,4 @@
-## Programacion de Aplicaciones Visuales 2
+## Programación de Aplicaciones Visuales 2
 ### Parcial Practico 2022
 ### Nota: 10 (diez)
 
